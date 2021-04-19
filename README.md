@@ -6,6 +6,16 @@ user interface to demonstrate specific outcomes. The delivery algorithm should o
 the delivery route to minimize the distance travelled. 
 
 ## Interface
+A very basic command interface, it has a set of commands based on selecting numbers 0 to 5 and hitting return.
+
+![A text based user interface with commands next to the number to select that command.](wgups_ui.png "Command Interface")
+![](ui_run_deliveries.png "Run Deliveries")
+![](ui_delivery_status_at_time.png "Status at a specified time")
+![](ui_package_lookup.png "Command Interface")
+![](ui_mileage_reset_and_exit.png "Command Interface")
+
+
+
 
 
 ## Learning Outcomes
