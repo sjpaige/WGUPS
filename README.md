@@ -1,9 +1,16 @@
-# Class Project: Package Delivery Routing
-
+# School Project: Package Delivery Routing
+### May 2020 | Python | Data Structures & Algorithms
 ## Project Purpose
 The goal of this class project was to create a lightweight package delivery simulation. It required only a text based 
 user interface to demonstrate specific outcomes. The delivery algorithm should optimize the packing of the trucks, and 
 the delivery route to minimize the distance travelled. 
+
+## Learning Outcomes
+
+* Learned to create hashtable data structure from scratch.
+* Created a somewhat efficient routing algorithm.
+* Worked to calculate the program and algorithm complexity.
+
 
 ## Interface
 A very basic command interface, it has a set of commands based on selecting numbers 0 to 5 and hitting return.
@@ -27,11 +34,13 @@ the simulation. Command 0 exits the simulation.
 ![Viewing mileage, resetting, and exiting the ui.](ui_mileage_reset_and_exit.png "Resetting and Exiting")
 
 
+## Installation
+Create a new Pycharm project with at least a Python 3.6 version interpreter. Unzip the project files into the new empty 
+project then run the files.
+
+## License
+
+No license for this work. 
 
 
 
-## Learning Outcomes
-
-* Learned to create hashtable data structure from scratch.
-* Created a somewhat efficient routing algorithm.
-* Worked to calculated program and algorithm efficiency.
