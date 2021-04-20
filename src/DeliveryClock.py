@@ -1,15 +1,22 @@
 import math
 
-
-# A class that creates clocks to track the time it takes the truck to make its deliveries.
-# Creates using a text string ie "8:00 AM" and does not have advance error handling or
-# any sort of fallback for bad input so use it properly. Built this way because a default python clock
-# or time calculation was not simple enough or created to interact with the travel_route method in this way.
 class DeliveryClock:
+    """
+    A class that creates clocks to track the time it takes the truck to make its deliveries.
 
-    # Instantiates new DeliverClock's by reading in a bit of text
-    # Time complexity of O(1)
+    Creates the clock using a text string ie "8:00 AM" and does limited error handling bad input so use it properly.
+    Built this way because a default python clock or time calculation was not simple enough or created specifically to
+    interact with the travel_route() method.
+    """
+
+
     def __init__(self, time_as_text):
+        """
+        Creates new DeliverClock's by reading in a string formatted HH:MM AM/PM
+
+        Time complexity of O(1)
+        :param time_as_text: a string formatted HH:MM AM/PM
+        """
         clock_parts = parse_string_time(time_as_text)
         self.hour = int(clock_parts.pop(0))
         self.minute = int(clock_parts.pop(0))
@@ -27,26 +34,43 @@ class DeliveryClock:
 
     # Handles bad input for the clock class a bit weirdly, therefore unused.
     # Time complexity of O(1)
-    def apply_clock_rules(self):
+    # def apply_clock_rules(self):
+    #
+    #     if self.hour > 12 | self.hour < 1:
+    #         print("hour_field_error: hour must be between 1 and 12.")
+    #         exit()
+    #     if self.minute > 59 | self.minute < 0:
+    #         print("minute_field_error: minutes must be between 0 and 59.")
+    #         exit()
+    #     if self.am_or_pm != "AM" & self.am_or_pm != "PM":
+    #         print("afternoon_field_error: value must be AM or PM")
+    #         exit()
 
-        if self.hour > 12 | self.hour < 1:
-            print("hour_field_error: hour must be between 1 and 12.")
-            exit()
-        if self.minute > 59 | self.minute < 0:
-            print("minute_field_error: minutes must be between 0 and 59.")
-            exit()
-        if self.am_or_pm != "AM" & self.am_or_pm != "PM":
-            print("afternoon_field_error: value must be AM or PM")
-            exit()
 
-    # Allows two clocks to be compared to one another, returns the result as an integer of minutes.
-    # Time complexity of O(1)
     def compare_time(self, other_time):
+        """
+        Allows two clocks to be compared to one another.
+
+        example:
+        clock1 = 8:00 AM = 480 minutes
+        clock2 = 8:10 AM = 490 minutes
+        480 - 490 = -10
+        clock two is later clock
+
+        Time complexity of O(1)
+        :param other_time: the time being compared
+        :return: the result as an integer of total minutes elapsed
+        during the day
+        """
         return self.total_minutes_value - other_time.total_minutes_value
 
-    # Controls how the clock displays itself when printed out.
-    # Time complexity O(1)
+
     def __str__(self):
+        """
+        Overrides the default method. Controls how the clock displays itself when printed out.
+        Time complexity O(1)
+        :return: the proper format for the clock as a string.
+        """
         hour_string = ""
         minute_string = ""
         if self.hour > 12:
@@ -61,11 +85,18 @@ class DeliveryClock:
 
         return hour_string + ":" + minute_string + " " + self.am_or_pm
 
-    # Adds a set amount of minutes to the clock and progresses time while tracking if its AM or PM
-    # designed to work with each iteration of the travel route method so that each destinations travel time
-    # can increment the overall workday clock.
-    # Time complexity O(1)
+
     def add_time_minutes_only(self, minutes):
+        """
+        Adds a set amount of minutes to the clock and progresses time while tracking if its AM or PM designed to
+        work with each iteration of the travel route method so that each destinations travel time can increment
+        the overall workday clock.
+
+        Time complexity O(1)
+
+        :param minutes: being added
+        :return: the new time
+        """
         minutes = math.ceil(minutes) # get rid of pesky seconds upwards
         self.total_minutes_value += minutes
         self.hour = self.total_minutes_value // 60
@@ -80,11 +111,16 @@ class DeliveryClock:
         else:
             self.am_or_pm = "AM"
 
-# Digests the text input into distinct parts for use in the instantiation of the clocks.
-# also handles the data from the csv file which has a lot saying EOD for END OF DAY but that is
-# actually 5:00 PM so this solves that
-# Time complexity of O(1)
+
 def parse_string_time(time_text="12:00 AM"):
+    """
+    Digests the text input into distinct parts for use in the creation of clocks. Also handles the data from the
+    csv file using EOD for END OF DAY which is 5:00 PM.
+
+    Time complexity of O(1)
+    :param time_text: a string representation of a time in HH:MM AM/PM format.
+    :return: a list of the parts of the clock
+    """
     if time_text == "EOD":
         time_text = "5:00 PM"
 
