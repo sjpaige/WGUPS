@@ -1,4 +1,3 @@
-
 # Author: Sebastian Paige
 # Main module where the delivery program runs
 # The menu function operates the functions of the program.
@@ -6,29 +5,39 @@ import DataStorage
 import ImportCSV
 from DeliveryTruck import DeliveryTruck
 from DeliveryClock import DeliveryClock
+
 truck2 = DeliveryTruck(2)
 
-# Resets and imports data for multiple runs so that the data does not get all corrupt and weird
-# after running the whole thing and trying to run it again live would just not work, and thanks
-# to this method now it resets everything during runtime, rather than having to shut down.
-# Time complextity O(N)
+
 def start_up_procedure():
-    DataStorage.clear_data() # clear the data
-    truck2.distance_travelled = 0 # reset the truck's distance so that it can run again
-    ImportCSV.import_locations() # import the locations from the csv
-    ImportCSV.import_packages() # import the packages from the csv
+    """
+    Resets and imports data for multiple runs so that the data does not get all corrupted.
+
+    Time complexity O(N)
+    """
+    DataStorage.clear_data()  # clear the data
+    truck2.distance_travelled = 0  # reset the truck's distance so that it can run again
+    ImportCSV.import_locations()  # import the locations from the csv
+    ImportCSV.import_packages()  # import the packages from the csv
 
 
-# Runs a full delivery of the route for a whole workday
-# Time complexity of O(N^2)
 def run_delivery():
+    """
+    Runs a full delivery of the route for a whole workday.
+
+    Time complexity of O(N^2)
+    """
     truck2.travel_route()
 
 
-# Allows the program to be stopped at a set time to see the status of all packages for that time
-# so that the all the delivery factors can be confirmed
-# Time complexity between O(1) and O(N^2) since the early exit of the delivery algorithm will reduce the load
 def check_delivery_status(time_input):
+    """
+    Allows the program to be stopped at a set time to see the status of all packages for that time so that the all
+    the delivery factors can be confirmed.
+
+    Time complexity between O(1) and O(N^2) since the early exit of the delivery algorithm will reduce the load
+    :param time_input:
+    """
     end_time = DeliveryClock(time_input)
     truck2.travel_route(end_time)
     packages = DataStorage.packages.search("undelivered", True)
@@ -36,9 +45,13 @@ def check_delivery_status(time_input):
         print(package)
 
 
-# Look up a single or multiple packages based on search terms
-# Time complexity up to O(N)
 def look_up():
+    """
+    Look up a single or multiple packages based on search keywords like the package ID or the delivery address.
+
+    Time complexity up to O(N)
+    :return: A single or multiple packages that match the keywords.
+    """
     print("enter a search term like: ")
     print(
         "package ID number, delivery address, delivery deadline, delivery city, delivery zip code, package weight, "
@@ -53,15 +66,15 @@ def look_up():
     elif multiple == "f":
         multiple = False
 
-    try: # Try to search for the package id but if its not an id then it will error
+    try:  # Try to search for the package id but if its not an id then it will error
         search_term = int(search_term)
-    except:
-        ValueError
+    except ValueError:
+        ValueError("")
 
     # Make sure that the search term is valid
     search_result = DataStorage.packages.search(search_term, multiple)
     if not search_result:
-        print("not a valid term try agian or menu to go back")
+        print("not a valid term try again or menu to go back")
         look_up()
     # If there are multiple results like searching for all package of a weight or certain status then it will show
     if multiple:
@@ -70,16 +83,19 @@ def look_up():
     else:
         print(search_result)
 
+
 # Allows users to check the mileage for partial delivery routes
 # Time complexity O(1)
 def mileage_check():
     print(f"{truck2} : travelled {truck2.distance_travelled} miles")
 
-# Menu controls the program based on user input
-# Time complexity of O(n^2) for each run_delivery() less for early exits
-# other menu items are negligible impact
-def menu():
 
+def menu():
+    """
+    Menu controls the program based on user input.
+
+    Time complexity of O(n^2) for each run_delivery() less for early exits other menu items are negligible impact
+    """
     print("0 - exit")
     print("1 - run full delivery")
     print("2 - run delivery up to time + all packages display status")
