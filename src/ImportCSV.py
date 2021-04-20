@@ -5,16 +5,16 @@ import DataStorage
 from HashTable import HashTable
 from StreetsGraph import *
 
-# A module to import csv data into the program
-
-# Takes a set file that contains the package data and reads it into the program
-# then it loads it into the hashtable and generates Package objects.
-# 18N+6
-# Time complexity of O(N)
 
 def import_packages():
+    """
+    A function to import csv data into the program
 
-
+    Takes a set file that contains the package data and reads it into the program
+    then it loads it into the hashtable and generates Package objects.
+    18N+6
+    Time complexity of O(N)
+    """
     with open((pathlib.Path.cwd() / "src/data/PackageFile.csv")) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
 
@@ -25,14 +25,12 @@ def import_packages():
         # so that there is limited collisions
         package_space = len(imported_data) * num_of_package_data_points
 
-        
         DataStorage.packages = HashTable(package_space)
         num_of_packages = 0
 
-
-        #Read the data into the package objects
+        # Read the data into the package objects
         for row in imported_data:
-            id = row[0]
+            package_id = row[0]
             address = row[1]
             city = row[2]
             state = row[3]
@@ -42,7 +40,7 @@ def import_packages():
             special_notes = row[7]
 
             # Create a new package
-            package = Package(id, address, city, state, zip_code, delivery_deadline, mass_kilo, special_notes)
+            package = Package(package_id, address, city, state, zip_code, delivery_deadline, mass_kilo, special_notes)
             # Insert package into the hashtable
             DataStorage.packages.insert(package.id, package)
             DataStorage.packages.insert(package.address, package)
@@ -58,13 +56,14 @@ def import_packages():
         DataStorage.number_of_packages_in_data = num_of_packages
 
 
-
-# Import the locations and distances from the CSV file and load them into a StreetsGraph
-# this method was chosen since it was much easier to import from the CSV than directly from and
-# excel file, and the data could be cleaned up anyways
-# 2N^2 + 5N + 4
-# this method has a time complexity of O(N^2)
 def import_locations():
+    """
+    Import the locations and distances from the CSV file and load them into a StreetsGraph this method was chosen
+    since it was much easier to import from the CSV than directly from and excel file, and the data could be cleaned up.
+
+    2N^2 + 5N + 4
+    This method has a time complexity of O(N^2)
+    """
     temp_holding = list()
     with open((pathlib.Path.cwd() / "src/data/DistanceTable.csv")) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
@@ -93,7 +92,6 @@ def import_locations():
         # N items * N Items to get the map of distances
         for location in DataStorage.streets_map.adjacent_locations:
             index = 0
-            for other_loaction in DataStorage.streets_map.adjacent_locations:
-                DataStorage.streets_map.add_twoway_street(location, other_loaction, location.distances[index])
+            for other_location in DataStorage.streets_map.adjacent_locations:
+                DataStorage.streets_map.add_twoway_street(location, other_location, location.distances[index])
                 index = index + 1
-
