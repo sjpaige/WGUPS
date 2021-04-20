@@ -1,9 +1,9 @@
 import csv
+import pathlib
 from Package import Package
 import DataStorage
 from HashTable import HashTable
 from StreetsGraph import *
-
 
 # A module to import csv data into the program
 
@@ -11,9 +11,11 @@ from StreetsGraph import *
 # then it loads it into the hashtable and generates Package objects.
 # 18N+6
 # Time complexity of O(N)
+
 def import_packages():
 
-    with open('PackageFile.csv') as csvfile:
+
+    with open((pathlib.Path.cwd() / "src/data/PackageFile.csv")) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
 
         imported_data = list(readCSV)  # import the package data
@@ -64,7 +66,7 @@ def import_packages():
 # this method has a time complexity of O(N^2)
 def import_locations():
     temp_holding = list()
-    with open('DistanceTable.csv') as csvfile:
+    with open((pathlib.Path.cwd() / "src/data/DistanceTable.csv")) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
 
         # Assuming the data is formatted correctly there would be N rows equivalent to N Locations
