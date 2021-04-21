@@ -2,19 +2,34 @@ from DeliveryClock import DeliveryClock
 import DataStorage
 
 
-# The package data type holds all of the data for an individual package and has important methods for parsing
-# the raw data into more complex or usable forms.
-# Time complexity for all items here is O(1) other than the search_ functions but unless the special note
-# data field has a huge N that would not have a large impact
 class Package:
+    """
+    The package data type holds all of the data for an individual package and has important methods for parsing the
+    raw data into more complex or usable forms.
 
-    def __init__(self, new_id, address, city, state, zip, delivery_deadline, mass_kilo, special_notes,
+    Time complexity for all items here is O(1) other than the search_ functions but unless the special note data field
+    has a huge N that would not have a large impact.
+    """
+
+    def __init__(self, new_id, address, city, state, zip_code, delivery_deadline, mass_kilo, special_notes,
                  delivery_status="undelivered"):
+        """
+        Creates new packages based on the parameters.
+        :param new_id:
+        :param address:
+        :param city:
+        :param state:
+        :param zip_code:
+        :param delivery_deadline:
+        :param mass_kilo:
+        :param special_notes:
+        :param delivery_status:
+        """
         self.id = int(new_id)
         self.address = address
         self.city = city
         self.state = state
-        self.zip = int(zip)
+        self.zip = int(zip_code)
         self.delivery_deadline = delivery_deadline
         self.mass_kilo = str(mass_kilo) + " kg"
         self.special_notes = special_notes
@@ -27,21 +42,35 @@ class Package:
         self.deliver_with = self.search_deliver_with(special_notes)
         self.wrong_address = self.search_wrong_address(special_notes)
 
-    # Add a location to the package that corresponds to the address
     def add_location(self, new_location):
+        """
+        Adds a location to the package that corresponds to the address in the original data.
+        :param new_location:
+        """
         self.location = new_location
 
-    # Add a time when the package was finally delivered
     def add_delivered_time(self, new_time):
+        """
+        Adds a delivery time to the package.
+        :param new_time:
+        """
         self.time_delivered = DeliveryClock(new_time)
 
     # find the initial importance value which is important to being able to
     def find_importance(self):
+        """
+        Calculates the initial importance value for the package that will be used by the self adjusting heuristic.
+        :return: A value representing where in the order the package should be delivered.
+        """
         delivery_deadline_metric = DeliveryClock(self.delivery_deadline).total_minutes_value
         return delivery_deadline_metric
 
-    # Heuristic to adjust the importance of the package
     def adjust_importance(self, current_location):
+        """
+        Adjusts the importance factor of the package based on where the truck has travelled.
+        :param current_location: Where the package is (current location of truck)
+        :return:
+        """
         distance = DataStorage.streets_map.street_distances[current_location, self.location]
         self.package_importance = float(distance)
 
@@ -53,7 +82,7 @@ class Package:
             return int(required_truck_id)
         return None
 
-    # Parse the speical note text for any delays
+    # Parse the special note text for any delays
     def search_delayed_time(self, note=""):
         if note.__contains__("Delayed"):
             find_clock_index = note.find(":")
@@ -75,14 +104,17 @@ class Package:
         if note.__contains__("Must be delivered with"):
             deliver_with_ids = note.replace("Must be delivered with", " ", 1).rsplit(',')
             deliver_with_list = []
-            for id in deliver_with_ids:
-                deliver_with_list.append(int(id))
+            for package_id in deliver_with_ids:
+                deliver_with_list.append(int(package_id))
             return deliver_with_list
         return []
 
     # Define the display when calling the string to be printed
     def __repr__(self):
-        return f"id:{self.id} current_status:{self.delivery_status} time_delivered: {self.time_delivered} destination: {self.address} {self.city} {self.state} {self.zip} " \
+        return f"id:{self.id} " \
+               f"current_status:{self.delivery_status} " \
+               f"time_delivered: {self.time_delivered} " \
+               f"destination: {self.address} {self.city} {self.state} {self.zip} " \
                f"notes: {self.special_notes}"
 
     # Defines the less-than functionality
