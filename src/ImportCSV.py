@@ -93,5 +93,5 @@ def import_locations():
         for location in DataStorage.streets_map.adjacent_locations:
             index = 0
             for other_location in DataStorage.streets_map.adjacent_locations:
-                DataStorage.streets_map.add_twoway_street(location, other_location, location.distances[index])
+                DataStorage.streets_map.add_two_way_street(location, other_location, location.distances[index])
                 index = index + 1
