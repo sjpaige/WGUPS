@@ -8,8 +8,8 @@ the delivery route to minimize the distance travelled.
 ## Learning Outcomes
 
 * Learned to create hashtable data structure from scratch.
-* Created a somewhat efficient routing algorithm.
-* Worked to calculate the program and algorithm complexity.
+* Created a somewhat efficient package routing algorithm.
+* Worked to calculate the functions and algorithm rough time complexity.
 
 
 ## Interface
