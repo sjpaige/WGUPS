@@ -11,7 +11,7 @@ class Package:
     has a huge N that would not have a large impact.
     """
 
-    def __init__(self, new_id, address, city, state, zip_code, delivery_deadline, mass_kilo, special_notes,
+    def __init__(self, new_id, address, city, state, zip_code, delivery_deadline, mass_kilo, special_notes="",
                  delivery_status="undelivered"):
         """
         Creates new packages based on the parameters.
@@ -37,10 +37,10 @@ class Package:
         self.location = DataStorage.search_map(f"{self.address} ({self.zip})")
         self.time_delivered = None
         self.package_importance = self.find_importance()
-        self.require_truck = self.search_required_truck(special_notes)
-        self.delayed = self.search_delayed_time(special_notes)
-        self.deliver_with = self.search_deliver_with(special_notes)
-        self.wrong_address = self.search_wrong_address(special_notes)
+        self.require_truck = self.search_required_truck()
+        self.delayed = self.search_delayed_time()
+        self.deliver_with = self.search_deliver_with()
+        self.wrong_address = self.search_wrong_address()
 
     def add_location(self, new_location):
         """
@@ -75,34 +75,34 @@ class Package:
         self.package_importance = float(distance)
 
     # Parse the special note text for any required trucks
-    def search_required_truck(self, note=""):
-        if note.__contains__("Can only be on"):
-            truck_index = note.find("truck")
-            required_truck_id = note[truck_index + 6:truck_index + 7]
+    def search_required_truck(self):
+        if self.special_notes.__contains__("Can only be on"):
+            truck_index = self.special_notes.find("truck")
+            required_truck_id = self.special_notes[truck_index + 6:truck_index + 7]
             return int(required_truck_id)
         return None
 
     # Parse the special note text for any delays
-    def search_delayed_time(self, note=""):
-        if note.__contains__("Delayed"):
-            find_clock_index = note.find(":")
-            hour = note[find_clock_index - 2:find_clock_index]
-            minute = note[find_clock_index + 1:find_clock_index + 3]
-            am_or_pm = note[find_clock_index + 4:find_clock_index + 6].upper()
+    def search_delayed_time(self):
+        if self.special_notes.__contains__("Delayed"):
+            find_clock_index = self.special_notes.find(":")
+            hour = self.special_notes[find_clock_index - 2:find_clock_index]
+            minute = self.special_notes[find_clock_index + 1:find_clock_index + 3]
+            am_or_pm = self.special_notes[find_clock_index + 4:find_clock_index + 6].upper()
             clock_gen_text = f"{hour}:{minute} {am_or_pm}"
             return DeliveryClock(clock_gen_text)
         return None
 
     # Parse he special note text for any wrong address
-    def search_wrong_address(self, note=""):
-        if note.__contains__("Wrong address"):
+    def search_wrong_address(self):
+        if self.special_notes.__contains__("Wrong address"):
             return True
         return False
 
     # Parse the special note text for any packages that must be delivered with this one
-    def search_deliver_with(self, note=""):
-        if note.__contains__("Must be delivered with"):
-            deliver_with_ids = note.replace("Must be delivered with", " ", 1).rsplit(',')
+    def search_deliver_with(self):
+        if self.special_notes.__contains__("Must be delivered with"):
+            deliver_with_ids = self.special_notes.replace("Must be delivered with", " ", 1).rsplit(',')
             deliver_with_list = []
             for package_id in deliver_with_ids:
                 deliver_with_list.append(int(package_id))

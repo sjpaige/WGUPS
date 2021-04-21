@@ -54,7 +54,7 @@ def look_up():
     """
     print("enter a search term like: ")
     print(
-        "package ID number, delivery address, delivery deadline, delivery city, delivery zip_code code, package weight, "
+        "package ID number, delivery address, delivery deadline, delivery city, delivery zip_code, package weight, "
         "delivery status (e.g., delivered, in route)")
     search_term = input()
     if search_term == "menu":
